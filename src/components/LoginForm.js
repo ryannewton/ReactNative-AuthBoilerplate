@@ -6,17 +6,17 @@ import { Text } from 'react-native';
 import firebase from 'firebase';
 
 //Import components, functions, and styles
-import { Button, Card, CardSection, Input } from './common';
+import { Button, Card, CardSection, Input, Spinner } from './common';
 
 class LoginForm extends Component {
-	state = { email: '', password: '', error: '' };
+	state = { email: '', password: '', error: '', loading: false };
 
 	onButtonPress() {
 		// User pressed 'Log in'
 		const { email, password } = this.state;
 
 		// Clear previous error message
-		this.setState({ error: '' });
+		this.setState({ error: '', loading: true });
 
 		// 1. Check if credentials match an existing account
 		firebase.auth().signInWithEmailAndPassword(email, password)
@@ -27,7 +27,23 @@ class LoginForm extends Component {
 						// 3. If the account cannot be signed into or created (e.g. email in use), show an error
 						this.setState({ error: 'Authentication Failed' });
 					});
+			})
+			.then(() => {
+				this.setState({ loading: false });
 			});
+	}
+
+	renderButton() {
+		// If loading, show Spinner
+		if (this.state.loading) {
+			return <Spinner size="small" />;
+		}
+
+		return (
+			<Button onPress={this.onButtonPress.bind(this)}>
+				Log in
+			</Button>
+		);
 	}
 
 	render() {
@@ -59,12 +75,10 @@ class LoginForm extends Component {
 					{this.state.error}
 				</Text>
 
-				{/*Log in button*/}
 				<CardSection>
-					<Button onPress={this.onButtonPress.bind(this)}>
-						Log in
-					</Button>
+					{this.renderButton()}
 				</CardSection>
+
 			</Card>
 		);
 	}
