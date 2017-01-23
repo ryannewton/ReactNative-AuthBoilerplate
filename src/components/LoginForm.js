@@ -2,16 +2,24 @@
 
 // Import libraries
 import React, { Component } from 'react';
-import { View } from 'react-native';
 
 //Import components, functions, and styles
-import { Button, Card, CardSection } from './common';
+import { Button, Card, CardSection, Input } from './common';
 
 class LoginForm extends Component {
+	state = { email: '' };
+
 	render() {
 		return (
 			<Card>
-				<CardSection />
+				<CardSection>
+					<Input
+						placeholder="john@gmail.com"
+						label="Email"
+						value={this.state.email}
+						onChangeText={(email) => this.setState({ email })}
+					/>
+				</CardSection>
 				<CardSection />
 
 				<CardSection>
