@@ -2,6 +2,7 @@
 
 // Import libraries
 import React, { Component } from 'react';
+import { Text } from 'react-native';
 import firebase from 'firebase';
 
 //Import components, functions, and styles
@@ -53,6 +54,11 @@ class LoginForm extends Component {
 					/>
 				</CardSection>
 
+				{/*Displays errors (blank if none)*/}
+				<Text style={styles.errorTextStyle}>
+					{this.state.error}
+				</Text>
+
 				{/*Log in button*/}
 				<CardSection>
 					<Button onPress={this.onButtonPress.bind(this)}>
@@ -63,5 +69,13 @@ class LoginForm extends Component {
 		);
 	}
 }
+
+const styles = {
+	errorTextStyle: {
+		fontSize: 20,
+		alignSelf: 'center',
+		color: 'red'
+	}
+};
 
 export default LoginForm;
