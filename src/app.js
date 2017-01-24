@@ -11,8 +11,19 @@ import LoginForm from './components/LoginForm';
 import firebaseConfig from '../api_keys';
 
 class App extends Component {
+	state = { loggedIn: false };
+
 	componentWillMount() {
 		firebase.initializeApp(firebaseConfig);
+
+		// Update state based on if user is logged in
+		firebase.auth().onAuthStateChanged((user) => {
+			if (user) {
+				this.setState({ loggedIn: true });
+			} else {
+				this.setState({ loggedIn: false });
+			}
+		});
 	}
 
 	render() {
