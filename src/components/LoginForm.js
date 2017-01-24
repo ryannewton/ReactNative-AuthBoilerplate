@@ -18,19 +18,27 @@ class LoginForm extends Component {
 		// Clear previous error message
 		this.setState({ error: '', loading: true });
 
-		// 1. Check if credentials match an existing account
+		// Check if credentials match an existing account
 		firebase.auth().signInWithEmailAndPassword(email, password)
+			.then(this.onLoginSuccess.bind(this))
 			.catch(() => {
-				// 2. If doesn't match existing accounts, try creating an account
+				// If doesn't match existing accounts, try creating an account
 				firebase.auth().createUserWithEmailAndPassword(email, password)
-					.catch(() => {
-						// 3. If the account cannot be signed into or created (e.g. email in use), show an error
-						this.setState({ error: 'Authentication Failed' });
-					});
-			})
-			.then(() => {
-				this.setState({ loading: false });
+					.then(this.onLoginSuccess.bind(this))
+					.catch(this.onLoginFail.bind(this));
 			});
+	}
+
+	onLoginFail() {
+		this.setState({ error: 'Authentication Failed', loading: false });
+	}
+
+	onLoginSuccess() {
+		this.setState({
+			email: '',
+			password: '',
+			loading: false
+		});
 	}
 
 	renderButton() {
